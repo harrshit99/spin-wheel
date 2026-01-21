@@ -32,6 +32,41 @@
 
     .wheel-container {
       position: relative;
+      width: 260px;
+      height: 260px;
+      margin: 0 auto 20px;
+    }
+
+    .center-arrow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 0;
+      height: 0;
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+      border-left: 24px solid #facc15;
+      z-index: 5;
+    }
+
+    .center-circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: #111827;
+      border: 3px solid #facc15;
+      z-index: 4;
+    }
+
+    .label.dragon { top: 14px; left: 50%; transform: translateX(-50%); }
+    .label.tiger { right: 6px; top: 112px; }
+    .label.null { left: 6px; top: 112px; }
+      position: relative;
       width: 240px;
       height: 240px;
       margin: 0 auto 20px;
@@ -125,10 +160,11 @@
 
     <div class="wheel-container">
       <div id="wheel" class="wheel"></div>
-      <div class="label dragon">Dragon</div>
-      <div class="label tiger">Tiger</div>
-      <div class="label null">Null</div>
-      <div class="arrow"></div>
+      <div class="label dragon">🐉 Dragon<br/>1.4×</div>
+      <div class="label tiger">🐯 Tiger<br/>1.96×</div>
+      <div class="label null">Null<br/>0×</div>
+      <div class="center-arrow"></div>
+      <div class="center-circle"></div>
     </div>
 
     <div class="controls">
