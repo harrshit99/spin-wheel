@@ -180,8 +180,9 @@
     let spinning = false;
     let currentRotation = 0;
 
-    // Order must match visual wheel (starting from top, clockwise)
-    const segments = ["Dragon", "Tiger", "Null"]; 
+    // Visual order (clockwise from top)
+    const segments = ["Dragon", "Tiger", "Null"];
+    const segmentAngle = 360 / segments.length;
 
     spinBtn.addEventListener("click", () => {
       const amount = Number(amountInput.value);
@@ -191,21 +192,27 @@
       resultEl.textContent = "";
       spinBtn.disabled = true;
 
-      const randomIndex = Math.floor(Math.random() * segments.length);
-      const baseRotation = 360 * 6;
-      const segmentAngle = 360 / segments.length;
+      // Random spin amount
+      const extraSpins = Math.floor(Math.random() * 5) + 5; // 5–9 spins
+      const randomAngle = Math.random() * 360;
 
-      // Adjust so arrow (pointing right) matches the correct segment
-      const arrowOffset = -90; // because arrow is pointing right
-
-      const targetRotation =
-        baseRotation + randomIndex * segmentAngle + segmentAngle / 2 + arrowOffset;
-
+      const targetRotation = extraSpins * 360 + randomAngle;
       currentRotation += targetRotation;
+
       wheel.style.transform = `rotate(${currentRotation}deg)`;
 
       setTimeout(() => {
-        const outcome = segments[randomIndex];
+        // Normalize angle (0–360)
+        const finalAngle = (currentRotation % 360 + 360) % 360;
+
+        // Arrow points RIGHT → 0° is to the right
+        const arrowAngle = 0;
+
+        // Calculate which segment is under arrow
+        const adjustedAngle = (360 - finalAngle + arrowAngle) % 360;
+        const index = Math.floor(adjustedAngle / segmentAngle);
+
+        const outcome = segments[index];
         let payout = 0;
 
         if (outcome === "Tiger") payout = amount * 1.96;
