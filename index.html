@@ -37,21 +37,31 @@
       margin: 0 auto 20px;
     }
 
-    .center-arrow {
+    .outer-arrow {
       position: absolute;
-      top: 50%;
+      top: -18px;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translateX(-50%);
       width: 0;
       height: 0;
-      border-top: 12px solid transparent;
-      border-bottom: 12px solid transparent;
-      border-left: 24px solid #facc15;
-      z-index: 5;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-bottom: 24px solid #facc15;
+      z-index: 10;
     }
 
     .center-circle {
       position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #111827;
+      border: 3px solid #facc15;
+      z-index: 4;
+    }
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
@@ -159,11 +169,12 @@
     <h1>Dragon Tiger Spin</h1>
 
     <div class="wheel-container">
+      <div class="outer-arrow"></div>
       <div id="wheel" class="wheel"></div>
       <div class="label dragon">🐉 Dragon<br/>1.4×</div>
       <div class="label tiger">🐯 Tiger<br/>1.96×</div>
       <div class="label null">Null<br/>0×</div>
-      <div class="center-arrow"></div>
+      
       <div class="center-circle"></div>
     </div>
 
