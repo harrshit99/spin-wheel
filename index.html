@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dragon Tiger Spin Wheel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dragon Tiger Spin</title>
   <style>
     body {
       margin: 0;
@@ -17,17 +17,17 @@
     }
 
     .card {
-      background: #111827;
-      border-radius: 16px;
-      padding: 20px;
-      width: 340px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      background: #0b1220;
+      border-radius: 20px;
+      padding: 24px;
+      width: 360px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.6);
       text-align: center;
     }
 
     h1 {
-      margin-bottom: 16px;
-      font-size: 22px;
+      margin-bottom: 20px;
+      font-size: 24px;
     }
 
     .wheel-container {
@@ -37,62 +37,17 @@
       margin: 0 auto 20px;
     }
 
-    .outer-arrow {
-      position: absolute;
-      top: -18px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 0;
-      border-left: 12px solid transparent;
-      border-right: 12px solid transparent;
-      border-bottom: 24px solid #facc15;
-      z-index: 10;
-    }
-
-    .center-circle {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: #111827;
-      border: 3px solid #facc15;
-      z-index: 4;
-    }
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      background: #111827;
-      border: 3px solid #facc15;
-      z-index: 4;
-    }
-
-    .label.dragon { top: 14px; left: 50%; transform: translateX(-50%); }
-    .label.tiger { right: 6px; top: 112px; }
-    .label.null { left: 6px; top: 112px; }
-      position: relative;
-      width: 240px;
-      height: 240px;
-      margin: 0 auto 20px;
-    }
-
     .wheel {
       width: 100%;
       height: 100%;
       border-radius: 50%;
       border: 4px solid #4b5563;
       background: conic-gradient(
-        #f97316 0deg 120deg,
-        #22c55e 120deg 240deg,
-        #ef4444 240deg 360deg
+        #22c55e 0deg 120deg,   /* Dragon - green */
+        #facc15 120deg 240deg,/* Tiger - yellow */
+        #ef4444 240deg 360deg /* Null - red */
       );
-      transition: transform 3s ease-out;
+      transition: transform 3s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
     .label {
@@ -100,27 +55,42 @@
       font-size: 14px;
       font-weight: bold;
       color: #fff;
-      text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+      text-shadow: 0 0 5px rgba(0,0,0,0.8);
+      text-align: center;
     }
 
-    .label.dragon { top: 18px; left: 50%; transform: translateX(-50%); }
-    .label.tiger { right: 12px; top: 105px; }
-    .label.null { left: 12px; top: 105px; }
+    .label.dragon { top: 12px; left: 50%; transform: translateX(-50%); }
+    .label.tiger { right: 8px; top: 110px; }
+    .label.null { left: 8px; top: 110px; }
 
-    .arrow {
+    .center-circle {
       position: absolute;
-      top: -10px;
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translate(-50%, -50%);
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #0b1220;
+      border: 4px solid #facc15;
+      z-index: 5;
+    }
+
+    .center-arrow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       width: 0;
       height: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-bottom: 20px solid #facc15;
+      border-top: 14px solid transparent;
+      border-bottom: 14px solid transparent;
+      border-left: 28px solid #facc15;
+      z-index: 6;
     }
 
     .controls {
-      margin-top: 10px;
+      margin-top: 16px;
       text-align: left;
     }
 
@@ -128,27 +98,29 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     input {
       width: 120px;
-      padding: 6px;
-      border-radius: 8px;
+      padding: 8px;
+      border-radius: 10px;
       border: 1px solid #4b5563;
       background: #1f2933;
       color: #fff;
+      font-size: 15px;
     }
 
     button {
       width: 100%;
-      padding: 10px;
-      border-radius: 12px;
+      padding: 12px;
+      border-radius: 14px;
       border: none;
       background: #2563eb;
       color: #fff;
-      font-size: 16px;
+      font-size: 18px;
       cursor: pointer;
+      margin-top: 10px;
     }
 
     button:disabled {
@@ -157,7 +129,7 @@
     }
 
     .result {
-      margin-top: 12px;
+      margin-top: 14px;
       font-size: 18px;
       font-weight: bold;
       text-align: center;
@@ -165,17 +137,19 @@
   </style>
 </head>
 <body>
+
   <div class="card">
     <h1>Dragon Tiger Spin</h1>
 
     <div class="wheel-container">
-      <div class="outer-arrow"></div>
       <div id="wheel" class="wheel"></div>
+
       <div class="label dragon">🐉 Dragon<br/>1.4×</div>
       <div class="label tiger">🐯 Tiger<br/>1.96×</div>
       <div class="label null">Null<br/>0×</div>
-      
+
       <div class="center-circle"></div>
+      <div class="center-arrow"></div>
     </div>
 
     <div class="controls">
@@ -186,7 +160,7 @@
 
       <div class="row">
         <span>Bet Amount:</span>
-        <input type="number" id="amount" value="100" min="1" />
+        <input type="number" id="amount" value="100" min="1"/>
       </div>
 
       <button id="spinBtn">Spin</button>
@@ -210,7 +184,6 @@
 
     spinBtn.addEventListener("click", () => {
       const amount = Number(amountInput.value);
-
       if (spinning || amount <= 0 || amount > balance) return;
 
       spinning = true;
@@ -218,8 +191,9 @@
       spinBtn.disabled = true;
 
       const randomIndex = Math.floor(Math.random() * segments.length);
-      const baseRotation = 360 * 5;
+      const baseRotation = 360 * 6;
       const segmentAngle = 360 / segments.length;
+
       const targetRotation =
         baseRotation + randomIndex * segmentAngle + segmentAngle / 2;
 
@@ -247,5 +221,6 @@
       }, 3000);
     });
   </script>
+
 </body>
 </html>
