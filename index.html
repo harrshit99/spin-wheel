@@ -43,9 +43,9 @@
       border-radius: 50%;
       border: 4px solid #4b5563;
       background: conic-gradient(
-        #22c55e 0deg 120deg,   /* Dragon - green */
-        #facc15 120deg 240deg,/* Tiger - yellow */
-        #ef4444 240deg 360deg /* Null - red */
+        #22c55e 0deg 120deg,    /* Dragon - green */
+        #facc15 120deg 240deg, /* Tiger - yellow */
+        #ef4444 240deg 360deg  /* Null - red */
       );
       transition: transform 3s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
@@ -180,7 +180,8 @@
     let spinning = false;
     let currentRotation = 0;
 
-    const segments = ["Dragon", "Tiger", "Null"];
+    // Order must match visual wheel (starting from top, clockwise)
+    const segments = ["Dragon", "Tiger", "Null"]; 
 
     spinBtn.addEventListener("click", () => {
       const amount = Number(amountInput.value);
@@ -194,8 +195,11 @@
       const baseRotation = 360 * 6;
       const segmentAngle = 360 / segments.length;
 
+      // Adjust so arrow (pointing right) matches the correct segment
+      const arrowOffset = -90; // because arrow is pointing right
+
       const targetRotation =
-        baseRotation + randomIndex * segmentAngle + segmentAngle / 2;
+        baseRotation + randomIndex * segmentAngle + segmentAngle / 2 + arrowOffset;
 
       currentRotation += targetRotation;
       wheel.style.transform = `rotate(${currentRotation}deg)`;
