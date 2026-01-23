@@ -37,17 +37,24 @@
       margin: 0 auto 20px;
     }
 
+    /* This whole thing spins now */
+    .spinner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transition: transform 3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
     .wheel {
       width: 100%;
       height: 100%;
       border-radius: 50%;
       border: 4px solid #4b5563;
       background: conic-gradient(
-        #22c55e 0deg 120deg,    /* Dragon - green */
-        #facc15 120deg 240deg, /* Tiger - yellow */
-        #ef4444 240deg 360deg  /* Null - red */
+        #22c55e 0deg 120deg,    /* Dragon */
+        #facc15 120deg 240deg, /* Tiger */
+        #ef4444 240deg 360deg  /* Null */
       );
-      transition: transform 3s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
     .label {
@@ -57,11 +64,12 @@
       color: #fff;
       text-shadow: 0 0 5px rgba(0,0,0,0.8);
       text-align: center;
+      width: 80px;
     }
 
-    .label.dragon { top: 12px; left: 50%; transform: translateX(-50%); }
-    .label.tiger { right: 8px; top: 110px; }
-    .label.null { left: 8px; top: 110px; }
+    .label.dragon { top: 10px; left: 50%; transform: translateX(-50%); }
+    .label.tiger { right: -6px; top: 110px; }
+    .label.null { left: -6px; top: 110px; }
 
     .center-circle {
       position: absolute;
@@ -142,14 +150,20 @@
     <h1>Dragon Tiger Spin</h1>
 
     <div class="wheel-container">
-      <div id="wheel" class="wheel"></div>
 
-      <div class="label dragon">🐉 Dragon<br/>1.4×</div>
-      <div class="label tiger">🐯 Tiger<br/>1.96×</div>
-      <div class="label null">Null<br/>0×</div>
+      <!-- EVERYTHING INSIDE THIS SPINS -->
+      <div id="spinner" class="spinner">
+        <div class="wheel"></div>
 
+        <div class="label dragon">🐉 Dragon<br/>1.4×</div>
+        <div class="label tiger">🐯 Tiger<br/>1.96×</div>
+        <div class="label null">Null<br/>0×</div>
+      </div>
+
+      <!-- FIXED ARROW -->
       <div class="center-circle"></div>
       <div class="center-arrow"></div>
+
     </div>
 
     <div class="controls">
@@ -170,7 +184,7 @@
   </div>
 
   <script>
-    const wheel = document.getElementById("wheel");
+    const spinner = document.getElementById("spinner");
     const spinBtn = document.getElementById("spinBtn");
     const balanceEl = document.getElementById("balance");
     const amountInput = document.getElementById("amount");
@@ -180,7 +194,6 @@
     let spinning = false;
     let currentRotation = 0;
 
-    // Visual order (clockwise from top)
     const segments = ["Dragon", "Tiger", "Null"];
     const segmentAngle = 360 / segments.length;
 
@@ -192,23 +205,18 @@
       resultEl.textContent = "";
       spinBtn.disabled = true;
 
-      // Random spin amount
-      const extraSpins = Math.floor(Math.random() * 5) + 5; // 5–9 spins
+      const extraSpins = Math.floor(Math.random() * 5) + 5;
       const randomAngle = Math.random() * 360;
 
-      const targetRotation = extraSpins * 360 + randomAngle;
-      currentRotation += targetRotation;
-
-      wheel.style.transform = `rotate(${currentRotation}deg)`;
+      currentRotation += extraSpins * 360 + randomAngle;
+      spinner.style.transform = `rotate(${currentRotation}deg)`;
 
       setTimeout(() => {
-        // Normalize angle (0–360)
         const finalAngle = (currentRotation % 360 + 360) % 360;
 
-        // Arrow points RIGHT → 0° is to the right
+        // Arrow points RIGHT
         const arrowAngle = 0;
 
-        // Calculate which segment is under arrow
         const adjustedAngle = (360 - finalAngle + arrowAngle) % 360;
         const index = Math.floor(adjustedAngle / segmentAngle);
 
@@ -235,4 +243,5 @@
 
 </body>
 </html>
+
 
