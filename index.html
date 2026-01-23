@@ -37,7 +37,7 @@
       margin: 0 auto 20px;
     }
 
-    /* This whole thing spins now */
+    /* Whole spinner rotates: colors + text together */
     .spinner {
       width: 100%;
       height: 100%;
@@ -50,26 +50,39 @@
       height: 100%;
       border-radius: 50%;
       border: 4px solid #4b5563;
+      /* Red = Null, Green = Tiger, Yellow = Blank */
       background: conic-gradient(
-        #22c55e 0deg 120deg,    /* Dragon */
-        #facc15 120deg 240deg, /* Tiger */
-        #ef4444 240deg 360deg  /* Null */
+        #ef4444 0deg 120deg,   /* Null */
+        #22c55e 120deg 240deg,/* Tiger */
+        #facc15 240deg 360deg /* Blank */
       );
     }
 
     .label {
       position: absolute;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: bold;
       color: #fff;
       text-shadow: 0 0 5px rgba(0,0,0,0.8);
       text-align: center;
-      width: 80px;
+      width: 120px;
+      left: 50%;
+      top: 50%;
+      transform-origin: 0% 50%;
     }
 
-    .label.dragon { top: 10px; left: 50%; transform: translateX(-50%); }
-    .label.tiger { right: -6px; top: 110px; }
-    .label.null { left: -6px; top: 110px; }
+    /* Place labels in correct segment centers */
+    .label.null {
+      transform: rotate(60deg) translate(70px) rotate(-60deg);
+    }
+
+    .label.tiger {
+      transform: rotate(180deg) translate(70px) rotate(-180deg);
+    }
+
+    .label.blank {
+      display: none; /* Yellow stays blank */
+    }
 
     .center-circle {
       position: absolute;
@@ -82,19 +95,6 @@
       background: #0b1220;
       border: 4px solid #facc15;
       z-index: 5;
-    }
-
-    .center-arrow {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 0;
-      height: 0;
-      border-top: 14px solid transparent;
-      border-bottom: 14px solid transparent;
-      border-left: 28px solid #facc15;
-      z-index: 6;
     }
 
     .controls {
@@ -142,6 +142,13 @@
       font-weight: bold;
       text-align: center;
     }
+
+    .win {
+      margin-top: 6px;
+      font-size: 16px;
+      color: #22c55e;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -151,18 +158,15 @@
 
     <div class="wheel-container">
 
-      <!-- EVERYTHING INSIDE THIS SPINS -->
       <div id="spinner" class="spinner">
         <div class="wheel"></div>
 
-        <div class="label dragon">🐉 Dragon<br/>1.4×</div>
-        <div class="label tiger">🐯 Tiger<br/>1.96×</div>
         <div class="label null">Null<br/>0×</div>
+        <div class="label tiger">🐯 Tiger<br/>1.96×</div>
+        <div class="label blank"></div>
       </div>
 
-      <!-- FIXED ARROW -->
       <div class="center-circle"></div>
-      <div class="center-arrow"></div>
 
     </div>
 
@@ -179,7 +183,8 @@
 
       <button id="spinBtn">Spin</button>
 
-      <div id="result" class="result"></div>
+      <div id="result" class="result">RESULT</div>
+      <div id="win" class="win"></div>
     </div>
   </div>
 
@@ -189,12 +194,14 @@
     const balanceEl = document.getElementById("balance");
     const amountInput = document.getElementById("amount");
     const resultEl = document.getElementById("result");
+    const winEl = document.getElementById("win");
 
     let balance = 1000;
     let spinning = false;
     let currentRotation = 0;
 
-    const segments = ["Dragon", "Tiger", "Null"];
+    // Order matches wheel colors (clockwise from top)
+    const segments = ["Null", "Tiger", "Blank"];
     const segmentAngle = 360 / segments.length;
 
     spinBtn.addEventListener("click", () => {
@@ -202,7 +209,8 @@
       if (spinning || amount <= 0 || amount > balance) return;
 
       spinning = true;
-      resultEl.textContent = "";
+      resultEl.textContent = "RESULT";
+      winEl.textContent = "";
       spinBtn.disabled = true;
 
       const extraSpins = Math.floor(Math.random() * 5) + 5;
@@ -214,25 +222,29 @@
       setTimeout(() => {
         const finalAngle = (currentRotation % 360 + 360) % 360;
 
-        // Arrow points RIGHT
-        const arrowAngle = 0;
+        // Pointer is top (12 o'clock)
+        const pointerAngle = 270;
 
-        const adjustedAngle = (360 - finalAngle + arrowAngle) % 360;
+        const adjustedAngle = (360 - finalAngle + pointerAngle) % 360;
         const index = Math.floor(adjustedAngle / segmentAngle);
 
         const outcome = segments[index];
         let payout = 0;
 
         if (outcome === "Tiger") payout = amount * 1.96;
-        if (outcome === "Dragon") payout = amount * 1.4;
 
         balance = balance - amount + payout;
         balanceEl.textContent = `₹${balance.toFixed(2)}`;
 
-        if (payout > 0) {
-          resultEl.textContent = `Result: ${outcome} (+₹${payout.toFixed(2)})`;
+        if (outcome === "Tiger") {
+          resultEl.textContent = "RESULT: Tiger";
+          winEl.textContent = `You won ₹${payout.toFixed(2)}`;
+        } else if (outcome === "Null") {
+          resultEl.textContent = "RESULT: Null";
+          winEl.textContent = "You won ₹0";
         } else {
-          resultEl.textContent = `Result: ${outcome} (₹0)`;
+          resultEl.textContent = "RESULT: Blank";
+          winEl.textContent = "You won ₹0";
         }
 
         spinning = false;
