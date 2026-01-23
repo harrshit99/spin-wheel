@@ -50,11 +50,10 @@
       height: 100%;
       border-radius: 50%;
       border: 4px solid #4b5563;
-      /* Red = Null, Green = Tiger, Yellow = Blank */
       background: conic-gradient(
-        #ef4444 0deg 120deg,   /* Null */
-        #22c55e 120deg 240deg,/* Tiger */
-        #facc15 240deg 360deg /* Blank */
+        #22c55e 0deg 120deg,   /* Dragon - green */
+        #facc15 120deg 240deg,/* Tiger - yellow */
+        #ef4444 240deg 360deg /* Null - red */
       );
     }
 
@@ -71,8 +70,8 @@
       transform-origin: 0% 50%;
     }
 
-    /* Place labels in correct segment centers */
-    .label.null {
+    /* Place labels in the center of each slice */
+    .label.dragon {
       transform: rotate(60deg) translate(70px) rotate(-60deg);
     }
 
@@ -80,8 +79,8 @@
       transform: rotate(180deg) translate(70px) rotate(-180deg);
     }
 
-    .label.blank {
-      display: none; /* Yellow stays blank */
+    .label.null {
+      transform: rotate(300deg) translate(70px) rotate(-300deg);
     }
 
     .center-circle {
@@ -161,9 +160,9 @@
       <div id="spinner" class="spinner">
         <div class="wheel"></div>
 
-        <div class="label null">Null<br/>0×</div>
+        <div class="label dragon">🐉 Dragon<br/>1.4×</div>
         <div class="label tiger">🐯 Tiger<br/>1.96×</div>
-        <div class="label blank"></div>
+        <div class="label null">Null<br/>0×</div>
       </div>
 
       <div class="center-circle"></div>
@@ -200,8 +199,8 @@
     let spinning = false;
     let currentRotation = 0;
 
-    // Order matches wheel colors (clockwise from top)
-    const segments = ["Null", "Tiger", "Blank"];
+    // Order matches visual wheel (clockwise from top)
+    const segments = ["Dragon", "Tiger", "Null"];
     const segmentAngle = 360 / segments.length;
 
     spinBtn.addEventListener("click", () => {
@@ -232,6 +231,7 @@
         let payout = 0;
 
         if (outcome === "Tiger") payout = amount * 1.96;
+        if (outcome === "Dragon") payout = amount * 1.4;
 
         balance = balance - amount + payout;
         balanceEl.textContent = `₹${balance.toFixed(2)}`;
@@ -239,11 +239,11 @@
         if (outcome === "Tiger") {
           resultEl.textContent = "RESULT: Tiger";
           winEl.textContent = `You won ₹${payout.toFixed(2)}`;
-        } else if (outcome === "Null") {
-          resultEl.textContent = "RESULT: Null";
-          winEl.textContent = "You won ₹0";
+        } else if (outcome === "Dragon") {
+          resultEl.textContent = "RESULT: Dragon";
+          winEl.textContent = `You won ₹${payout.toFixed(2)}`;
         } else {
-          resultEl.textContent = "RESULT: Blank";
+          resultEl.textContent = "RESULT: Null";
           winEl.textContent = "You won ₹0";
         }
 
